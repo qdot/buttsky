@@ -1,39 +1,44 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
 import { BskyAgent } from '@atproto/api';
 import { ButtplugBrowserWebsocketClientConnector, ButtplugClient } from 'buttplug';
 
 const client = new ButtplugClient("buttsky");
-const connector = new ButtplugBrowserWebsocketClientConnector("ws://localhost:12345");
-client.connect(connector).then(() => console.log("Buttsky Connected to Intiface Central"));
-
 const agent = new BskyAgent({
   service: 'https://bsky.social',
 });
 
-agent.login({identifier: 'buttplug.engineer', password: '7rba-bsvf-zune-2lix'}).then(() => {
+async function connectToIntiface() {
+  const connector = new ButtplugBrowserWebsocketClientConnector("ws://localhost:12345");
+  await client.connect(connector);
+  console.log("Buttsky Connected to Intiface Central");
+}
+
+async function connectToBluesky() {
+  let user = document.querySelector("#bsuser")?.value;
+  let pass = document.querySelector("#bspass")?.value;
+  await agent.login({identifier: user, password: pass});
   console.log("Bluesky account connected");
   agent.countUnreadNotifications().then((v) => console.log(`${v.data.count} UNREAD POSTS`));
-}).catch((e) => console.log(`ERROR: ${e}`));
+  followNotificationCount();
+}
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+let stopNotifications = false;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function followNotificationCount() {
+  stopNotifications = false;
+  while (!stopNotifications) {
+    let notifications = await agent.countUnreadNotifications();
+    console.log(notifications.data.count);
+    await new Promise((res) => setTimeout(res, 5000));
+  }
+}
+
+function stopNotificationCount() {
+  console.log("Stopping notification count");
+  stopNotifications = true;
+}
+
+(window as any).connectToIntiface = connectToIntiface;
+(window as any).connectToBluesky = connectToBluesky;
+(window as any).followNotificationCount = followNotificationCount;
+(window as any).stopNotificationCount = stopNotificationCount;

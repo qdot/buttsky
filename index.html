@@ -7,7 +7,22 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="bpconnect">
+        <b>Buttplug Info</b><br/>
+        Address: <input value="ws://localhost:12345" id="bpaddress"></input><br/>
+        <button onclick="connectToIntiface()">Connect to Buttplug</button><br/>
+      </div>
+      <div id="bpconnected">
+      </div>
+      <div id="bsconnect">
+        <b>Bluesky Info</b><br/>
+        Username: <input id="bsuser"></input><br/>
+        Password: <input type="password" id="bspass"></input><br/>
+        <button onclick="connectToBluesky()">Connect to Bluesky</button><br/>
+      </div>
+      <button onclick="stopNotificationCount()">Stop Notification Count</button>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
