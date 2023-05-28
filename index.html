@@ -8,7 +8,20 @@
   </head>
   <body>
     <div id="app">
-      <div id="bpconnect">
+      <h1>BUTTSKY</h1>
+      <div style="text-align:left;">
+      <p>To use:</p>
+      <ul>
+        <li>Connect to <a href="https://intiface.com/central">Intiface Central</a> and/or Tail first</li>
+        <li>Connect to bluesky USING AN APP PASSWORD</li>
+        <li>Notification deltas are checked every 10 seconds.</li>
+        <li>5 levels of tail wagging/vibration speed, based on number of notifications</li>
+      </ul>
+      </div>
+      <p>Repo at <a href="https://github.com/qdot/buttsky">https://github.com/qdot/buttsky</a></p>
+      <br/>
+      <br/>
+    <div id="bpconnect">
         <b>Buttplug Info</b><br/>
         Address: <input value="ws://localhost:12345" id="bpaddress"></input><br/>
         <button onclick="connectToIntiface()">Connect to Buttplug</button><br/>
@@ -21,7 +34,9 @@
         Password: <input type="password" id="bspass"></input><br/>
         <button onclick="connectToBluesky()">Connect to Bluesky</button><br/>
       </div>
+      <button onclick="connectToMiTail()">Connect to MiTail</button><br/>
       <button onclick="stopNotificationCount()">Stop Notification Count</button>
+      <p id="status">Status: Not Connected to bsky</p>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
